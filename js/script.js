@@ -361,7 +361,7 @@ function sendResultsToEmail() {
     .send("service_ns5jgsc", "template_1ima2tk", params)
     .then(() => {
       alert(
-        `✅ Quiz results sent successfully to your Gmail!\nYou got ${correctCount} out of ${userAnswers.length} correct 🎯`
+        `✅ Quiz results saved successfully!`
       );
     })
     .catch((error) => {

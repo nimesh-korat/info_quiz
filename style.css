@@ -508,3 +508,12 @@ footer button.show {
   border-color: #ffffff;
 }
 /* (keep your existing quiz CSS below this block) */
+
+h1 {
+  text-align: center; /* horizontally center the text */
+  font-size: 40px; /* nice readable size */
+  color: white; /* matches your quiz theme */
+  margin-top: 30px; /* add spacing from top */
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}

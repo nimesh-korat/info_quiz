@@ -502,4 +502,9 @@ footer button.show {
   background-color: #ffffff;
   border-color: #ffffff;
 }
+
+.next_btn:hover {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
 /* (keep your existing quiz CSS below this block) */

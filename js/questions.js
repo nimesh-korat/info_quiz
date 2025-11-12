@@ -1,4 +1,4 @@
-const questions = [
+let questions = [
   {
     numb: 1,
     question: "Which HTML tag is used to display a numbered list?",

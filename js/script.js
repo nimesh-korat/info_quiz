@@ -47,6 +47,15 @@ function getErrorElement(inputEl, idSuffix) {
   return err;
 }
 
+function shuffleArray(array) {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
+
 // Basic validators
 function validateName(name) {
   if (!name) return "Name is required";
@@ -167,6 +176,17 @@ exitBtn.onclick = () => {
 continueBtn.onclick = () => {
   infoBox.classList.remove("activeInfo");
   quizBox.classList.add("activeQuiz");
+
+  // ✅ Shuffle questions safely before quiz starts
+  questions = shuffleArray(questions);
+
+  // ✅ Renumber shuffled questions
+  questions.forEach((q, i) => (q.numb = i + 1));
+
+  // ✅ Reset everything before starting
+  resetQuiz();
+
+  // ✅ Initialize quiz (this displays first question and starts timer)
   initializeQuiz();
 };
 
@@ -174,6 +194,10 @@ continueBtn.onclick = () => {
 restartQuizBtn.onclick = () => {
   resultBox.classList.remove("activeResult");
   quizBox.classList.add("activeQuiz");
+
+  questions = shuffleArray(questions);
+  questions.forEach((q, i) => (q.numb = i + 1));
+
   resetQuiz();
   initializeQuiz();
 };
@@ -237,13 +261,23 @@ function updateQuiz() {
 // Display questions
 function showQuestions(index) {
   const queText = document.querySelector(".que_text");
-  let queTag = `<span>${questions[index].numb}. ${questions[index].question}</span>`;
-  let optionTag = questions[index].options
-    .map((option) => `<div class="option"><span>${option}</span></div>`)
+  const currentQuestion = questions[index];
+
+  if (!currentQuestion) return; // prevent crashes
+
+  // ✅ Shuffle options for this question
+  const shuffledOptions = shuffleArray(currentQuestion.options);
+
+  // ✅ Build question and options
+  const queTag = `<span>${currentQuestion.numb}. ${currentQuestion.question}</span>`;
+  const optionTag = shuffledOptions
+    .map((opt) => `<div class="option"><span>${opt}</span></div>`)
     .join("");
+
   queText.innerHTML = queTag;
   optionList.innerHTML = optionTag;
 
+  // ✅ Add click listeners for options
   optionList.querySelectorAll(".option").forEach((option) => {
     option.onclick = () => optionSelected(option);
   });
@@ -360,9 +394,7 @@ function sendResultsToEmail() {
   emailjs
     .send("service_ns5jgsc", "template_1ima2tk", params)
     .then(() => {
-      alert(
-        `✅ Quiz results saved successfully!`
-      );
+      alert(`✅ Quiz results saved successfully!`);
     })
     .catch((error) => {
       console.error("❌ Email sending failed:", error);
